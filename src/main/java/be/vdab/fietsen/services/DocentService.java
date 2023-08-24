@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +50,14 @@ public class DocentService {
     @Transactional
     public void delete (long id){
         docentRepository.deleteById(id);
+    }
+    public List<Docent> findByWedde(BigDecimal wedde){
+        return docentRepository.findByWeddeOrderByFamilienaam(wedde);
+    }
+    public Optional<Docent> findByEmailAdres(String emailAdres){
+        return docentRepository.findByEmailAdres(emailAdres);
+    }
+    public int findAantalMetWedde(BigDecimal wedde){
+        return docentRepository.countByWedde(wedde);
     }
 }

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -43,5 +44,17 @@ public class DocentController {
             docentService.delete(id);
         }catch(EmptyResultDataAccessException ignored){
         }
+    }
+    @GetMapping(params = "wedde")
+    public List<Docent> findByWedde(BigDecimal wedde){
+        return docentService.findByWedde(wedde);
+    }
+    @GetMapping(params = "emailAdres")
+    Docent findByEmailAdres(String emailAdres){
+        return docentService.findByEmailAdres(emailAdres).orElseThrow(DocentNietGevondenException::new);
+    }
+    @GetMapping(value = "aantal", params = "wedde")
+    int findAantalMetWedde(BigDecimal wedde){
+        return docentService.findAantalMetWedde(wedde);
     }
 }
