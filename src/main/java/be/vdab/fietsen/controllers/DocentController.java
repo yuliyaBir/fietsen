@@ -5,6 +5,7 @@ import be.vdab.fietsen.dto.NieuweDocent;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
 import be.vdab.fietsen.services.DocentService;
 import jakarta.validation.Valid;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +36,12 @@ public class DocentController {
     @PostMapping
     long create(@RequestBody @Valid NieuweDocent nieuweDocent){
         return docentService.create(nieuweDocent);
+    }
+    @DeleteMapping("{id}")
+    void delete(@PathVariable long id){
+        try{
+            docentService.delete(id);
+        }catch(EmptyResultDataAccessException ignored){
+        }
     }
 }
