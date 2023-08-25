@@ -60,4 +60,7 @@ public class DocentService {
     public int findAantalMetWedde(BigDecimal wedde){
         return docentRepository.countByWedde(wedde);
     }
+    public List<Docent> findMetGrootsteWedde(){
+        return docentRepository.findMetGrootsteWedde();
+    }
 }
