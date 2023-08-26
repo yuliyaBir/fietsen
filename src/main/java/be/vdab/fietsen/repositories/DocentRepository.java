@@ -36,4 +36,5 @@ public interface DocentRepository extends JpaRepository<Docent, Long> {
         group by d.wedde   
         """)
     List<AantalDocentenPerWedde> findAantalDocentenPerWedde();
+
 }

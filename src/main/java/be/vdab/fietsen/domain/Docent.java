@@ -51,4 +51,7 @@ public class Docent {
     public Geslacht getGeslacht() {
         return geslacht;
     }
+    public void setWedde(BigDecimal wedde){
+        this.wedde = wedde;
+    }
 }

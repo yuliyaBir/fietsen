@@ -5,6 +5,7 @@ import be.vdab.fietsen.dto.AantalDocentenPerWedde;
 import be.vdab.fietsen.dto.EnkelNaam;
 import be.vdab.fietsen.dto.NieuweDocent;
 import be.vdab.fietsen.exceptions.DocentBestaatAlException;
+import be.vdab.fietsen.exceptions.DocentNietGevondenException;
 import be.vdab.fietsen.repositories.DocentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -73,5 +74,11 @@ public class DocentService {
     }
     public List<AantalDocentenPerWedde> findAantalDocentenPerWedde(){
         return docentRepository.findAantalDocentenPerWedde();
+    }
+    @Transactional
+    public void wijzigWedde(long id, BigDecimal wedde){
+        docentRepository.findById(id)
+                .orElseThrow(DocentNietGevondenException::new)
+                .setWedde(wedde);
     }
 }
