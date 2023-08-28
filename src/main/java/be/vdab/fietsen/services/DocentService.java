@@ -81,4 +81,8 @@ public class DocentService {
                 .orElseThrow(DocentNietGevondenException::new)
                 .setWedde(wedde);
     }
+    @Transactional
+    public void algemeneOpslag(BigDecimal bedrag){
+        docentRepository.algemeneOpslag(bedrag);
+    }
 }

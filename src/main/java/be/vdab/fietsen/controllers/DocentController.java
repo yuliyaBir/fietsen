@@ -87,6 +87,10 @@ public class DocentController {
         } catch(ObjectOptimisticLockingFailureException ex){
             throw new EenAndereGebruikerWijzigdeDeDocentException();
         }
-
+    }
+    private record Opslag(@NotNull @Positive BigDecimal bedrag){}
+    @PostMapping("weddeverhogingen")
+    void algemeneOpslag(@RequestBody @Valid Opslag opslag){
+        docentService.algemeneOpslag(opslag.bedrag);
     }
 }
