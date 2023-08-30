@@ -5,6 +5,7 @@ import be.vdab.fietsen.dto.AantalDocentenPerWedde;
 import be.vdab.fietsen.dto.EnkelNaam;
 import be.vdab.fietsen.dto.NieuweDocent;
 import be.vdab.fietsen.exceptions.DocentBestaatAlException;
+import be.vdab.fietsen.exceptions.DocentHeeftDezeBijnaamAlException;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
 import be.vdab.fietsen.repositories.DocentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -84,5 +86,17 @@ public class DocentService {
     @Transactional
     public void algemeneOpslag(BigDecimal bedrag){
         docentRepository.algemeneOpslag(bedrag);
+    }
+
+    @Transactional
+    public void voegBijnaamToe(long id, String bijnaam){
+        docentRepository.findById(id).orElseThrow(DocentNietGevondenException::new)
+                .voegBijnaamToe(bijnaam);
+    }
+    @Transactional
+    public void verwijderBijnaam(long id, String bijnaam){
+        docentRepository.findById(id)
+                .orElseThrow(DocentNietGevondenException::new)
+                .verwijderBijnaam(bijnaam);
     }
 }
