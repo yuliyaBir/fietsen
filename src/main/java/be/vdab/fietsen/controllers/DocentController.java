@@ -1,7 +1,9 @@
 package be.vdab.fietsen.controllers;
 
+import be.vdab.fietsen.domain.Campus;
 import be.vdab.fietsen.domain.Docent;
 import be.vdab.fietsen.dto.AantalDocentenPerWedde;
+import be.vdab.fietsen.dto.CampusBeknopt;
 import be.vdab.fietsen.dto.EnkelNaam;
 import be.vdab.fietsen.dto.NieuweDocent;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
@@ -42,8 +44,9 @@ public class DocentController {
                 .stream().map(docent -> new DocentBeknopt(docent));
     }
     @GetMapping("{id}")
-    Docent findById(@PathVariable long id) {
+    DocentBeknoptMetBijnamen findById(@PathVariable long id) {
         return docentService.findById(id)
+                .map(docent -> new DocentBeknoptMetBijnamen(docent))
                 .orElseThrow(DocentNietGevondenException::new);
     }
     @GetMapping ("{id}/bestaat")
@@ -67,8 +70,10 @@ public class DocentController {
                 .stream().map(docent -> new DocentBeknopt(docent));
     }
     @GetMapping(params = "emailAdres")
-    Docent findByEmailAdres(String emailAdres){
-        return docentService.findByEmailAdres(emailAdres).orElseThrow(DocentNietGevondenException::new);
+    DocentBeknoptMetBijnamen findByEmailAdres(String emailAdres){
+        return docentService.findByEmailAdres(emailAdres)
+                .map(docent -> new DocentBeknoptMetBijnamen(docent))
+                .orElseThrow(DocentNietGevondenException::new);
     }
     @GetMapping(value = "aantal", params = "wedde")
     int findAantalMetWedde(BigDecimal wedde){
@@ -131,6 +136,24 @@ public class DocentController {
     Stream<DocentBeknoptMetBijnamen> findAllMetBijnamen(){
         return docentService.findAllMetBijnamen()
                 .stream().map(docent -> new DocentBeknoptMetBijnamen(docent));
-
     }
+    @GetMapping("{id}/campus")
+    CampusBeknopt findCampusVan(@PathVariable long id){
+        return docentService.findById(id)
+                .map(docent -> new CampusBeknopt(docent.getCampus()))
+                .orElseThrow(DocentNietGevondenException::new);
+    }
+    private record DocentBeknoptMetCampus(long id, String voornaam, String familienaam,
+                                          long campusId, String campusNaam){
+        DocentBeknoptMetCampus (Docent docent){
+            this(docent.getId(), docent.getVoornaam(), docent.getFamilienaam(), docent.getCampus().getId(), docent.getCampus().getNaam());
+        }
+    }
+    @GetMapping("metCampussen")
+    Stream <DocentBeknoptMetCampus> findAllMetCampussen(){
+        return docentService.findAllMetCampussen()
+                .stream().map(docent -> new DocentBeknoptMetCampus(docent));
+    }
+
+
 }

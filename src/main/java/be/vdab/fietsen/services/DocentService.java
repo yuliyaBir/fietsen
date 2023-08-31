@@ -4,9 +4,10 @@ import be.vdab.fietsen.domain.Docent;
 import be.vdab.fietsen.dto.AantalDocentenPerWedde;
 import be.vdab.fietsen.dto.EnkelNaam;
 import be.vdab.fietsen.dto.NieuweDocent;
+import be.vdab.fietsen.exceptions.CampusInDocentNietGevondenException;
 import be.vdab.fietsen.exceptions.DocentBestaatAlException;
-import be.vdab.fietsen.exceptions.DocentHeeftDezeBijnaamAlException;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
+import be.vdab.fietsen.repositories.CampusRepository;
 import be.vdab.fietsen.repositories.DocentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -16,15 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
 public class DocentService {
     private final DocentRepository docentRepository;
+    private final CampusRepository campusRepository;
 
-    public DocentService(DocentRepository docentRepository) {
+    public DocentService(DocentRepository docentRepository, CampusRepository campusRepository) {
         this.docentRepository = docentRepository;
+        this.campusRepository = campusRepository;
     }
     public long findAantal(){
         return docentRepository.count();
@@ -41,11 +43,13 @@ public class DocentService {
     @Transactional
     public long create(NieuweDocent nieuweDocent){
         try{
+            var campus = campusRepository.findById(nieuweDocent.campusId())
+                    .orElseThrow(CampusInDocentNietGevondenException::new);
             var docent = new Docent(nieuweDocent.voornaam(),
                     nieuweDocent.familienaam(),
                     nieuweDocent.wedde(),
                     nieuweDocent.emailAdres(),
-                    nieuweDocent.geslacht());
+                    nieuweDocent.geslacht(), campus);
             docentRepository.save(docent);
             return docent.getId();
         }catch (DataIntegrityViolationException ex){
@@ -101,5 +105,8 @@ public class DocentService {
     }
     public List<Docent> findAllMetBijnamen(){
         return docentRepository.findAllMetBijnamen();
+    }
+    public List<Docent> findAllMetCampussen(){
+        return docentRepository.findAllMetCampussen();
     }
 }

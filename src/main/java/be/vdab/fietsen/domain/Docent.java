@@ -27,13 +27,17 @@ public class Docent {
         joinColumns = @JoinColumn(name = "docentId"))
     @Column(name = "bijnaam")
     private Set<String> bijnamen;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "campusId")
+    private Campus campus;
 
-    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht) {
+    public Docent(String voornaam, String familienaam, BigDecimal wedde, String emailAdres, Geslacht geslacht, Campus campus) {
         this.voornaam = voornaam;
         this.familienaam = familienaam;
         this.wedde = wedde;
         this.emailAdres = emailAdres;
         this.geslacht = geslacht;
+        this.campus = campus;
         bijnamen = new LinkedHashSet<>();
     }
 
@@ -63,6 +67,11 @@ public class Docent {
     public Geslacht getGeslacht() {
         return geslacht;
     }
+
+    public Campus getCampus() {
+        return campus;
+    }
+
     public void setWedde(BigDecimal wedde){
         this.wedde = wedde;
     }
