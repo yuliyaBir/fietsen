@@ -1,9 +1,12 @@
 package be.vdab.fietsen.domain;
 
+import be.vdab.fietsen.exceptions.CampusHeeftDezeDocentAlException;
 import jakarta.persistence.*;
+import org.springframework.core.annotation.Order;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,12 +22,23 @@ public class Campus {
         joinColumns = @JoinColumn(name = "campusId"))
     @OrderBy("vanaf")
     private Set<Huurprijs> huurprijzen;
+    @OneToMany(mappedBy = "campus")
+    @OrderBy("voornaam, familienaam")
+    private Set<Docent> docenten;
 
     public Campus(long id, String naam, Adres adres) {
         this.id = id;
         this.naam = naam;
         this.adres = adres;
         huurprijzen = new LinkedHashSet<Huurprijs>();
+        docenten = new LinkedHashSet<>();
+    }
+    //constructor voor eiegen gebruik
+    public Campus(String naam, Adres adres){
+        this.naam = naam;
+        this. adres = adres;
+        huurprijzen = new LinkedHashSet<Huurprijs>();
+        docenten = new LinkedHashSet<Docent>();
     }
     protected Campus(){}
 
@@ -39,7 +53,30 @@ public class Campus {
     public Adres getAdres() {
         return adres;
     }
+
+    public Set<Docent> getDocenten() {
+        return Collections.unmodifiableSet(docenten);
+    }
+    public void voegDocentToe(Docent docent){
+        if(!docenten.add(docent)){
+            throw new CampusHeeftDezeDocentAlException();
+        }
+    }
+
     public Set<Huurprijs> getHuurprijzen(){
         return Collections.unmodifiableSet(huurprijzen);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Campus campus)) return false;
+//        return Objects.equalsIgnoreCase(naam, campus.naam);
+        return Objects.equals(naam, campus.naam);
+
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(naam.toLowerCase());
     }
 }

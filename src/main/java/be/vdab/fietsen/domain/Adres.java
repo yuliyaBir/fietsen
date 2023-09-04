@@ -2,6 +2,8 @@ package be.vdab.fietsen.domain;
 
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class Adres {
     private String straat;
@@ -32,5 +34,17 @@ public class Adres {
 
     public String getGemeente() {
         return gemeente;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Adres adres)) return false;
+        return postcode == adres.postcode && Objects.equals(straat, adres.straat) && Objects.equals(huisNr, adres.huisNr) && Objects.equals(gemeente, adres.gemeente);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(straat, huisNr, postcode, gemeente);
     }
 }

@@ -50,6 +50,7 @@ public class DocentService {
                     nieuweDocent.wedde(),
                     nieuweDocent.emailAdres(),
                     nieuweDocent.geslacht(), campus);
+            campus.voegDocentToe(docent);
             docentRepository.save(docent);
             return docent.getId();
         }catch (DataIntegrityViolationException ex){

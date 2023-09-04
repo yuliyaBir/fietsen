@@ -1,11 +1,7 @@
 package be.vdab.fietsen.controllers;
 
-import be.vdab.fietsen.domain.Campus;
 import be.vdab.fietsen.domain.Docent;
-import be.vdab.fietsen.dto.AantalDocentenPerWedde;
-import be.vdab.fietsen.dto.CampusBeknopt;
-import be.vdab.fietsen.dto.EnkelNaam;
-import be.vdab.fietsen.dto.NieuweDocent;
+import be.vdab.fietsen.dto.*;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
 import be.vdab.fietsen.exceptions.EenAndereGebruikerWijzigdeDeDocentException;
 import be.vdab.fietsen.services.DocentService;
@@ -30,11 +26,7 @@ public class DocentController {
     public DocentController(DocentService docentService) {
         this.docentService = docentService;
     }
-    private record DocentBeknopt(long id, String voornaam, String familienaam){
-        private DocentBeknopt (Docent docent){
-            this(docent.getId(), docent.getVoornaam(), docent.getFamilienaam());
-        }
-    }
+
     @GetMapping("aantal") long findAantal(){
         return docentService.findAantal();
     }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -85,5 +86,15 @@ public class Docent {
     }
     public Set<String> getBijnamen(){
         return Collections.unmodifiableSet(bijnamen);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Docent docent && emailAdres.equalsIgnoreCase(docent.emailAdres);
+    }
+
+    @Override
+    public int hashCode() {
+        return emailAdres.toLowerCase().hashCode();
     }
 }
