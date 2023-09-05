@@ -71,9 +71,7 @@ public class Campus {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Campus campus)) return false;
-//        return Objects.equalsIgnoreCase(naam, campus.naam);
-        return Objects.equals(naam, campus.naam);
-
+        return naam.equalsIgnoreCase(campus.naam);
     }
     @Override
     public int hashCode() {

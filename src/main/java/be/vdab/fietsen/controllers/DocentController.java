@@ -1,6 +1,7 @@
 package be.vdab.fietsen.controllers;
 
 import be.vdab.fietsen.domain.Docent;
+import be.vdab.fietsen.domain.Taak;
 import be.vdab.fietsen.dto.*;
 import be.vdab.fietsen.exceptions.DocentNietGevondenException;
 import be.vdab.fietsen.exceptions.EenAndereGebruikerWijzigdeDeDocentException;
@@ -146,6 +147,13 @@ public class DocentController {
         return docentService.findAllMetCampussen()
                 .stream().map(docent -> new DocentBeknoptMetCampus(docent));
     }
-
+    @GetMapping("{id}/taken")
+    Stream<TaakBeknopt> findTaken(@PathVariable long id) {
+        return docentService.findById(id)
+                .orElseThrow(DocentNietGevondenException::new)
+                .getTaken()
+                .stream()
+                .map(taak -> new TaakBeknopt(taak));
+    }
 
 }
