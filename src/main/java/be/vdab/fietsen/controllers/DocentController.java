@@ -58,9 +58,10 @@ public class DocentController {
         }
     }
     @GetMapping(params = "wedde")
-    public Stream<DocentBeknopt> findByWedde(BigDecimal wedde){
+    Stream<DocentBeknoptMetCampus> findByWedde(BigDecimal wedde){
         return docentService.findByWedde(wedde)
-                .stream().map(docent -> new DocentBeknopt(docent));
+                .stream()
+                .map(docent -> new DocentBeknoptMetCampus(docent));
     }
     @GetMapping(params = "emailAdres")
     DocentBeknoptMetBijnamen findByEmailAdres(String emailAdres){
