@@ -10,13 +10,11 @@ public abstract class Cursus {
     @Id
     @Column(columnDefinition = "binary(16)")
     private UUID id;
-//    private String naam;
-
+    private String naam;
     public UUID getId() {
         return id;
     }
-
-//    public String getNaam() {
-//        return naam;
-//    }
+    public String getNaam() {
+        return naam;
+    }
 }
